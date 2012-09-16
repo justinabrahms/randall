@@ -1,0 +1,34 @@
+Private Urls
+============
+
+This is a simple daemon that will look for very short urls and direct
+you to where you want to go. You can define these small redirections
+through a minimal configuration file.
+
+Examples
+--------
+
+# Static redirections
+m/ -> mail.google.com/
+m2/ -> mail.google.com/u/2/
+docs/ -> docs.google.com/
+
+# more complex redirections using capturing groups
+s/1/1293 -> sprint.ly/products/1/ticket/1293
+
+
+How it works
+------------
+
+DNS Server:
+1. Request comes into the DNS server
+2. if requested_url is in config_file:
+3.   respond (localhost, _)
+   else
+4.   respond (_, no clue. ask another dns server)
+
+
+Web Server:
+1. Request comes into web server
+2. if requested_url is in config_file
+3.   respond (302<url>, _)
