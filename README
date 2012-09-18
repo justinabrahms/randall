@@ -1,9 +1,10 @@
-Private Urls
-============
+Randall, the Rememberer.
+========================
 
-This is a simple daemon that will look for very short urls and direct
-you to where you want to go. You can define these small redirections
-through a minimal configuration file.
+Randall is a simple daemon that will look for very short urls and
+direct you to where you want to go. You can define these small
+redirections through a minimal web UI, backed by your own /etc/hosts
+file.
 
 Examples
 --------
@@ -13,22 +14,44 @@ m/ -> mail.google.com/
 m2/ -> mail.google.com/u/2/
 docs/ -> docs.google.com/
 
-# more complex redirections using capturing groups
+# Someday, we might have more complex redirections using capturing
+# groups, such as:
 s/1/1293 -> sprint.ly/products/1/ticket/1293
 
 
 How it works
 ------------
 
-DNS Server:
-1. Request comes into the DNS server
-2. if requested_url is in config_file:
-3.   respond (localhost, _)
-   else
-4.   respond (_, no clue. ask another dns server)
+1. Randall writes the things you want him to remember in your
+   /etc/hosts file.
 
+2. When you navigate to them, he ushers you to his web server which
+   then 302's you to the correct location.
 
-Web Server:
-1. Request comes into web server
-2. if requested_url is in config_file
-3.   respond (302<url>, _)
+Randall just uses some special syntax in your /etc/hosts file, if you
+don't want to use his web UI. The basic formula is:
+
+    127.0.0.1  my_short_name_here # => http://path/to/long/name
+
+This will setup a redirect from my_short_name_here to
+http://path/to/long/name
+
+Getting up and running
+----------------------
+
+1. Create & activate a virtualenv for Randall's dependencies to be
+   installed in.
+2. Install the requirements via `pip install -r requirements.txt`
+3. Run `sudo ./randall.py`
+4. Navigate to http://localhost/ to get started.
+
+Caveats
+-------
+
+Randall must be run with sudo privledges. This is because he alters
+your /etc/hosts file and his webserver listens on port 80. 
+
+Randall is currently in very early stages. He's perfectly functional,
+but isn't battle-scarred. Specifically the way he writes to your
+/etc/hosts may be 'incorrect'. He nor I take responsibility for
+brokenness (though we do our bests to make backups).
