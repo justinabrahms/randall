@@ -1,2 +1,56 @@
-Hi. I'm {{program}}. I manage mappings from absurdly short urls like
-`m/` to real urls like `mail.google.com/`.
+<html>
+  <head>
+    <title>Randall the Rememberer</title>
+    <link rel="stylesheet" href="{{css}}" type="text/css" media="screen" />
+  </head>
+  <body>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <header>
+      <h1 class="greeting">Hi! I'm Randall.</h1>
+      <p>Randall likes to memorize things like <code>m/</code> really means
+	<code>http://mail.google.com/</code>. This should save you
+	typing. Randall really likes to help out!</p>
+    </header>
+    <section>
+      <h2>Tell me new something to remember:</h2>
+      <form action="/" method="POST">
+	<input name="short_name" /> really means <input name="url" />.
+	<button>Remember</button>
+      </form>
+    </section>
+    <section>
+      <h2>Things I already remember:</h2>
+      <table>
+	<tr>
+	  <th>This..</th>
+	  <th>Means this..</th>
+	  <th></th>
+	</tr>
+	{% for key,val in remembered.iteritems() %}
+	<tr>
+	  <td>{{ key }}</td>
+	  <td>{{ val }}</td>
+	  <td>
+	    <form action="/delete" method="POST">
+	      <input type="hidden" name="short_name" value="{{key}}" />
+	      <button>Forget</button>
+	    </form>
+	  </td>
+	</tr>
+	{% endfor %}
+      </table>
+    </section>
+    <footer>
+      <p>Randall was built by <a href="http://justinlilly.com/">Justin Lilly</a>.</p>
+    </footer>
+  </body>
+</html>

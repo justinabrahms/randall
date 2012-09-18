@@ -1,0 +1,14 @@
+body {
+    width: 600px;
+    margin: 0 auto;
+    font-family: Helvetica;
+    background-color: azure;
+}
+
+h1.greeting {
+    padding-top: 285px;
+    text-align: center;
+    background: url('/static/randall.png') no-repeat;
+    height: 150px;
+}
+
