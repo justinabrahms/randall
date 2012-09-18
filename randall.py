@@ -74,7 +74,8 @@ class Randall(object):
         self._app.add_url_rule('/', view_func=self.redirection_handler)
         self._app.add_url_rule('/', view_func=self.new_url_handler, methods=("POST",))
         self._app.add_url_rule('/delete', view_func=self.forget_url_handler, methods=("POST",))
-        self._app.run(port=80, debug=True)
+        # TODO: Pass in flag for if debug or not.
+        self._app.run(port=80)
 
 if __name__ == '__main__':
     # TODO: ensure this is run with sudo privs.
