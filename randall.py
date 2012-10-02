@@ -79,5 +79,9 @@ class Randall(object):
 
 if __name__ == '__main__':
     # TODO: ensure this is run with sudo privs.
-    s = Randall()
-    s.serve()
+    if os.geteuid() is 0:
+        s = Randall()
+        s.serve()
+    else:
+        print("You need to be root to run randall.py")
+
