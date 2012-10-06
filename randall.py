@@ -47,10 +47,16 @@ class Randall(object):
         del self._mappings[short_name]
         self.flush()
 
-    def redirection_handler(self):
+    def redirection_handler(self, path=None):
         """Serves the redirecting http server."""
         if request.host in self._mappings:
-            return redirect(self._mappings[request.host])
+            try:
+                if not path:
+                    raise TypeError # bail for default
+                host = self._mappings[request.host] % tuple(path.split('/'))
+            except TypeError:
+                host = self._mappings[request.host]
+            return redirect(host)
         # We were directly navigated to.
         return render_template("index.html",
                                css=url_for('static', filename='randall.css'),
@@ -71,7 +77,8 @@ class Randall(object):
         return redirect('/')
 
     def serve(self):
-        self._app.add_url_rule('/', view_func=self.redirection_handler)
+        self._app.add_url_rule('/', view_func=self.redirection_handler, methods=("HEAD","GET"))
+        self._app.add_url_rule('/<path:path>', view_func=self.redirection_handler, methods=("HEAD","GET"))
         self._app.add_url_rule('/', view_func=self.new_url_handler, methods=("POST",))
         self._app.add_url_rule('/delete', view_func=self.forget_url_handler, methods=("POST",))
         # TODO: Pass in flag for if debug or not.
@@ -84,4 +91,3 @@ if __name__ == '__main__':
         s.serve()
     else:
         print("You need to be root to run randall.py")
-
