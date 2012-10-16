@@ -1,9 +1,15 @@
 PLIST_FILENAME=com.justinlilly.randall.plist
 PLIST_DEST=/Library/LaunchDaemons/$(PLIST_FILENAME)
+DEPS := base.m4
+
+ifeq ($(shell test ! -f overrides.m4 || echo n),n)
+    DEPS += overrides.m4
+endif
+
 
 all: randall.plist
 
-randall.plist: base.m4 randall.plist.m4
+randall.plist: $(DEPS) randall.plist.m4
 	m4 $^ > $(PLIST_FILENAME)
 
 install: randall.plist
